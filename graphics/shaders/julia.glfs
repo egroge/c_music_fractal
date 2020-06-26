@@ -1,0 +1,41 @@
+#version 330 core 
+
+uniform int width;
+uniform int height;
+uniform vec2 bottom_left;
+uniform vec2 scale; 
+uniform int iterations;
+uniform float audioval;
+
+void main() {
+    vec2 z = vec2(bottom_left.x + (gl_FragCoord.x / width) * scale.x,
+            bottom_left.y + (gl_FragCoord.y / height) * scale.y); 
+
+    vec2 c = vec2(0.385, 0.3f);
+    int i;
+    float radius = 0;
+    for (i = 0; i < iterations; i++) {
+        float x = (z.x * z.x - z.y * z.y) + c.x;
+        float y = (z.y * z.x + z.x * z.y) + c.y;
+
+        radius = x * x + y * y;
+        if(radius > 4.0) {
+            break;
+        }
+
+        z.x = x;
+        z.y = y;
+    }
+
+    if(i == iterations) {
+        gl_FragColor = vec4(0, 0, 0, 1);
+    } else {
+        float n = float(i);
+        float r = 0.5f * sin(audioval * n) + 0.5f;
+        float g = 0.5f * sin(0.1 * n + 2.094f) + 0.5f;
+        float b = 0.2f * sin(audioval * n) + 0.5f;
+        gl_FragColor = vec4(r, g, b, 1.0);
+    }
+}
+
+

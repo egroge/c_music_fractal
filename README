@@ -1,0 +1,19 @@
+Command line arguments:
+./main <PATH TO SHADER TO USE> <PATH TO WAV FILE TO USE>
+
+Song recommendations:
+    1. bluedanube.wav
+    2. waltz.wav
+    3. valast.wav
+    4. shubert.wav
+
+This project has dependencies.
+
+SDL2 is needed for this project. If You're on linux you can install SDL with:
+    sudo apt-get install libsdl2-dev
+openGL:
+    sudo apt-get install libgl-dev
+    sudo apt-get install libglew-dev
+
+Note: the power_n shader does not work as a command line argument, since it takes different arguments
+

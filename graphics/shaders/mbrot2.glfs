@@ -1,0 +1,68 @@
+#version 330 core 
+uniform int width;
+uniform int height;
+uniform vec2 bottom_left;
+uniform vec2 top_right;
+uniform vec2 scale; 
+uniform int iterations;
+uniform float audioval;
+
+vec3 hsv_to_rgb(vec3 hsv) {
+    // Remember to update this when improving precision
+    // Conversion algorithm adapted from rapidtables.com
+    float c = hsv.z * hsv.y;  // hsv: x = h, y = s, z = v
+    float x = c * (1 - abs(int(hsv.x / 60) % 2 - 1));
+    float m = hsv.z - c;
+
+    vec3 rgb;
+
+    if (0 <= hsv.x && hsv.x < 60) {
+        rgb = vec3(c, x, 0);
+    } else if (60 <= hsv.x && hsv.x < 120) {
+        rgb = vec3(x, c, 0);
+    } else if (120 <= hsv.x && hsv.x < 180) {
+        rgb = vec3(0, c, x);
+    } else if (180 <= hsv.x && hsv.x < 240) {
+        rgb = vec3(0, x, c);
+    } else if (240 <= hsv.x && hsv.x < 300) {
+        rgb = vec3(x, 0, c);
+    } else if (300 <= hsv.x && hsv.x < 360) {
+        rgb = vec3(c, 0, x);
+    } else {
+        // We should never be able to get here
+        rgb = vec3(1, 1, 1);
+    }
+
+    rgb.xyz += m;
+    return rgb;
+}
+
+void main() {
+    vec2 c = vec2(bottom_left.x + (gl_FragCoord.x / width) * scale.x,
+            bottom_left.y + (gl_FragCoord.y / height) * scale.y); 
+
+    vec2 z = c;
+    int i;
+    float radius = 0;
+    for (i = 0; i < iterations; i++) {
+        float x = (z.x * z.x - z.y * z.y) + c.x;
+        float y = (z.y * z.x + z.x * z.y) + c.y;
+
+        radius = x * x + y * y;
+        if(radius > 4.0) {
+            break;
+        }
+
+        z.x = x;
+        z.y = y;
+    }
+
+    if(i == iterations) {
+        gl_FragColor = vec4(0, 0, 0, 1);
+    } else {
+        float closeness = float(i) / iterations; 
+        gl_FragColor = vec4(hsv_to_rgb(vec3(360 * closeness * audioval, 10 * closeness, 10 * closeness)), 1);
+    }
+}
+
+
