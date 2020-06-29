@@ -1,11 +1,10 @@
+This is a C group project extension written in first year of Imperial College London. 
+It uses opengl to render fractals on the GPU, and has them 'dance' in real time to music files passed in.
+
+It was written and tested on Ubuntu linux, for opengl version 3.3
+
 Command line arguments:
 ./main <PATH TO SHADER TO USE> <PATH TO WAV FILE TO USE>
-
-Song recommendations:
-    1. bluedanube.wav
-    2. waltz.wav
-    3. valast.wav
-    4. shubert.wav
 
 This project has dependencies.
 
